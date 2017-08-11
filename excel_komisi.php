@@ -1,40 +1,85 @@
 <?php
 header("Content-type: application/vnd-ms-excel");
-header("Content-Disposition: attachment; filename=komisi_sales.xls");
+header("Content-Disposition: attachment; filename=komisi_bayar_sales.xls");
 include ('koneksi.php');
-if(isset($_POST['cari'])){
-$list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
-  `salesman`.*,
-  `barang`.`Nama_Barang`,
-  `barang`.`Komisi`,
-  `transaksi_detail`.`Qty`,
-  `target_salesman`.`Keterangan`,
-  `transaksi_detail`.`Harga`
-FROM
-  `salesman`
-  INNER JOIN `transaksi_detail` ON `salesman`.`Id_Salesman` =
-    `transaksi_detail`.`Sales`
-  INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang`
-  INNER JOIN `target_salesman` ON `salesman`.`Id_Target` =
-    `target_salesman`.`Id_Target` where `salesman`.`Id_Salesman` ='".$_POST['nama']."'");
+
+if(isset($_GET['cari'])){
+  if($_GET['nama'] == "" && $_GET['Tgl1'] == "" && $_GET['Tgl2'] == ""){
+    $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+      `transaksi`.`Jumlah` AS `Jumlah`,
+      `customer`.`Nama_Customer`,
+      `salesman`.`Nama_Salesman`,
+      `transaksi`.`No_transaksi`,
+      `transaksi`.`Tgl_Tempo`,
+      `transaksi`.`Tgl`,
+      `transaksi`.`Status`,
+      `customer`.`Id_Customer`
+    FROM
+      `transaksi`
+      INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
+      INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
+     where `transaksi`.`Status` = 'Lunas'");
+   } else if($_GET['nama'] != "" && $_GET['Tgl1'] == "" && $_GET['Tgl2'] == ""){
+     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+       `transaksi`.`Jumlah` AS `Jumlah`,
+       `customer`.`Nama_Customer`,
+       `salesman`.`Nama_Salesman`,
+       `transaksi`.`No_transaksi`,
+       `transaksi`.`Tgl_Tempo`,
+       `transaksi`.`Tgl`,
+       `transaksi`.`Status`,
+       `customer`.`Id_Customer`
+     FROM
+       `transaksi`
+       INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
+       INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
+      where `transaksi`.`Status` = 'Lunas' and `customer`.`Id_Customer` ='".$_GET['nama']."'");
+   } else if($_GET['nama'] == "" && $_GET['Tgl1'] != "" && $_GET['Tgl2'] != ""){
+     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+       `transaksi`.`Jumlah` AS `Jumlah`,
+       `customer`.`Nama_Customer`,
+       `salesman`.`Nama_Salesman`,
+       `transaksi`.`No_transaksi`,
+       `transaksi`.`Tgl_Tempo`,
+       `transaksi`.`Tgl`,
+       `transaksi`.`Status`,
+       `customer`.`Id_Customer`
+     FROM
+       `transaksi`
+       INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
+       INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
+      where `transaksi`.`Status` = 'Lunas' and `transaksi`.`Tgl` between '".$_GET['Tgl1']."' and '".$_GET['Tgl2']."'");
+   } else {
+     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+       `transaksi`.`Jumlah` AS `Jumlah`,
+       `customer`.`Nama_Customer`,
+       `salesman`.`Nama_Salesman`,
+       `transaksi`.`No_transaksi`,
+       `transaksi`.`Tgl_Tempo`,
+       `transaksi`.`Tgl`,
+       `transaksi`.`Status`,
+       `customer`.`Id_Customer`
+     FROM
+       `transaksi`
+       INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
+       INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
+      where `transaksi`.`Status` = 'Lunas' and `customer`.`Id_Customer` ='".$_GET['nama']."' and `transaksi`.`Tgl` between '".$_GET['Tgl1']."' and '".$_GET['Tgl2']."'");
+   }
 }else{
     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
-  Sum(`transaksi`.`Jumlah`) AS `Jumlah`,
+  `transaksi`.`Jumlah` AS `Jumlah`,
   `customer`.`Nama_Customer`,
   `salesman`.`Nama_Salesman`,
   `transaksi`.`No_transaksi`,
   `transaksi`.`Tgl_Tempo`,
   `transaksi`.`Tgl`,
+  `transaksi`.`Status`,
   `customer`.`Id_Customer`
 FROM
   `transaksi`
   INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
   INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
-GROUP BY
-  `transaksi`.`No_transaksi`,
-  `transaksi`.`Tgl_Tempo`,
-  `transaksi`.`Tgl`,
-  `customer`.`Id_Customer`");
+  where `transaksi`.`Status` = 'Lunas'");
 }
   ?>
 <form method="POST"/>
@@ -67,7 +112,7 @@ GROUP BY
 
         <td><?php echo $proses['Nama_Customer'];?></td>
         <td><?php echo $proses['Nama_Salesman'];?></td>
-    <td><?php echo $proses['Jumlah'];?></td>
+    <td><?php echo number_format($proses['Jumlah'],0,',','.');?></td>
 
 </tr>
 
@@ -77,7 +122,7 @@ GROUP BY
     } ?>
     <tr>
     <td colspan="5">Jumlah Komisi Bayar</td>
-    <td><?php echo $total;?></td>
+    <td><?php echo number_format($total,0,',','.');?></td>
     </tr>
 
 

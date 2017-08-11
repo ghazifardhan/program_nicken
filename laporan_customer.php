@@ -1,29 +1,75 @@
 <?php
 include("koneksi.php");
 if(isset($_POST['cari'])){
-$list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
-  `wilayah`.`Nama`,
-  `transaksi_detail`.*,
-  `salesman`.`Nama_Salesman`,
-  `barang`.`Nama_Barang`
-FROM
-  `wilayah`
-  INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
-    `wilayah`.`Id_Wilayah`
-  INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
-  INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.Customer ='".$_POST['nama']."' and Tgl between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
-  //echo $list_transaksi;
-
+  if($_POST['nama'] == "" && $_POST['Tgl1'] == "" && $_POST['Tgl2'] == ""){
+      $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+        `wilayah`.`Nama`,
+        `transaksi_detail`.*,
+        `salesman`.`Nama_Salesman`,
+        `barang`.`Nama_Barang`,
+        `customer`.`Nama_Customer`
+      FROM
+        `wilayah`
+        INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+          `wilayah`.`Id_Wilayah`
+        INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+        INNER JOIN `customer` ON `transaksi_detail`.`Customer` = `customer`.`Id_Customer`
+        INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang`");
+  } else if($_POST['nama'] != "" && $_POST['Tgl1'] == "" && $_POST['Tgl2'] == ""){
+      $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+        `wilayah`.`Nama`,
+        `transaksi_detail`.*,
+        `salesman`.`Nama_Salesman`,
+        `barang`.`Nama_Barang`,
+        `customer`.`Nama_Customer`
+      FROM
+        `wilayah`
+        INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+          `wilayah`.`Id_Wilayah`
+        INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+        INNER JOIN `customer` ON `transaksi_detail`.`Customer` = `customer`.`Id_Customer`
+        INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.Customer ='".$_POST['nama']."'");
+  } else if($_POST['nama'] == "" && $_POST['Tgl1'] != "" && $_POST['Tgl2'] != ""){
+      $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+        `wilayah`.`Nama`,
+        `transaksi_detail`.*,
+        `salesman`.`Nama_Salesman`,
+        `barang`.`Nama_Barang`,
+        `customer`.`Nama_Customer`
+      FROM
+        `wilayah`
+        INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+          `wilayah`.`Id_Wilayah`
+        INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+        INNER JOIN `customer` ON `transaksi_detail`.`Customer` = `customer`.`Id_Customer`
+        INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.`Tgl` between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
+  } else {
+    $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+      `wilayah`.`Nama`,
+      `transaksi_detail`.*,
+      `salesman`.`Nama_Salesman`,
+      `barang`.`Nama_Barang`,
+      `customer`.`Nama_Customer`
+    FROM
+      `wilayah`
+      INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+        `wilayah`.`Id_Wilayah`
+      INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+      INNER JOIN `customer` ON `transaksi_detail`.`Customer` = `customer`.`Id_Customer`
+      INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.Customer ='".$_POST['nama']."' and `transaksi_detail`.`Tgl` between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
+  }
 }else{
     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
   `wilayah`.`Nama`,
   `transaksi_detail`.*,
   `salesman`.`Nama_Salesman`,
-  `barang`.`Nama_Barang`
+  `barang`.`Nama_Barang`,
+  `customer`.`Nama_Customer`
 FROM
   `wilayah`
   INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
     `wilayah`.`Id_Wilayah`
+  INNER JOIN `customer` ON `transaksi_detail`.`Customer` = `customer`.`Id_Customer`
   INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
   INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang`");
 }
@@ -33,7 +79,7 @@ include('header.php');
 <table>
 <tr><td><select name="nama" class="form-control"/>
     <option value="">Semua Customer</option>
-    <?php  $data=mysqli_query($GLOBALS["___mysqli_ston"], "select * from Customer");
+    <?php  $data=mysqli_query($GLOBALS["___mysqli_ston"], "select * from customer");
     while($list=mysqli_fetch_array($data)){ ?>
 
 
@@ -47,13 +93,14 @@ include('header.php');
 <div id="print-area" class="print-area">
 <div style="text-align:right;"><a class="btn btn-info no-print" href="javascript:printDiv('print-area');">Print</a></div>
 <br>
-<div style="text-align:right;"><a class="btn btn-success no-print" href="excel_customer.php">Download Exel</a></div>
+<div style="text-align:right;"><a class="btn btn-success no-print" href="excel_customer.php?cari=<?php echo $_POST['cari'];?>&nama=<?php echo $_POST['nama']; ?>&Tgl1=<?php echo $_POST['Tgl1']; ?>&Tgl2=<?php echo $_POST['Tgl2']; ?>">Download Exel</a></div>
 <h4>Laporan Customer PT.Pratama inti distribusindo</h4>
 <table border="1" class="table table-bordered">
 
     <tr>
         <td>No</td>
         <td>Nama Sales</td>
+        <td>Nama Customer</td>
         <td>Nama Barang</td>
         <td>Harga</td>
         <td>qty</td>
@@ -71,6 +118,7 @@ include('header.php');
     <td><?php echo $no++;?></td>
 
     <td><?php echo $proses['Nama_Salesman'];?></td>
+    <td><?php echo $proses['Nama_Customer'];?></td>
     <td><?php echo $proses['Nama_Barang'];?></td>
 
         <td><?php echo number_format($proses['Harga']);?></td>
@@ -84,7 +132,7 @@ include('header.php');
     $total+=$proses['Harga'] * $proses['Qty'];
     } ?>
     <tr>
-    <td colspan="5">Jumlah Barang Belanja</td>
+    <td colspan="6">Jumlah Barang Belanja</td>
     <td><?php echo number_format($total);?></td>
     </tr>
 

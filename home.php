@@ -4,7 +4,9 @@ include('header.php');
 ?>
 <br>
 <br>
-<img src="logo_PID _kecil.jpg"/>
+<div class="imgR">
+  <img src="logo_PID _kecil.jpg"/>
+</div>
 
                 <?php
                 include('footer.php');

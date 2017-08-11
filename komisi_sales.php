@@ -3,9 +3,7 @@
 include ('koneksi.php');
 include('header.php');
 if(isset($_POST['cari'])){
-
-$id_sales = $_POST['nama'];
-if($_POST['nama'] == 'all'){
+if($_POST['nama'] == ''){
   $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
     `salesman`.*,
     `barang`.`Nama_Barang`,
@@ -53,7 +51,7 @@ FROM
 <form method="POST"/>
 <table>
 <tr><td><select name="nama" class="form-control"/>
-    <option value="all">Semua sales</option>
+    <option value="">Semua sales</option>
     <?php  $data=mysqli_query($GLOBALS["___mysqli_ston"], "select * from salesman");
     while($list=mysqli_fetch_array($data)){ ?>
 
@@ -67,7 +65,7 @@ FROM
 <div id="print-area" class="print-area">
 <div style="text-align:right;">
   <a class="btn btn-info no-print" href="javascript:printDiv('print-area');">Print</a>
-  <a class="btn btn-success no-print" href="excel_komisi_sales.php?cari=submit&nama=<?php echo $id_sales; ?>">Download Excel</a>
+  <a class="btn btn-success no-print" href="excel_komisi_sales.php?cari=submit&nama=<?php echo $_POST['nama']; ?>">Download Excel</a>
 </div>
 <h4>Laporan Komisi Sales PT.Pratama inti distribusindo</h4>
 <table border="1" class="table table-bordered">
@@ -126,10 +124,10 @@ FROM
     <td><?php
     if($total > $target){
         $komisi = ($total * 0.02);
-        echo $komisi;
+        echo number_format($komisi);
     }else{
         $komisi = 0;
-        echo $komisi;
+        echo number_format($komisi);
     }
     ?></td>
     </tr>

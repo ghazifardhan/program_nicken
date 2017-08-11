@@ -46,6 +46,37 @@ session_start();
         Detailed information and more samples can be found in the document.
         -->
 
+    <style>
+
+    .imgR {
+      width: 100%;
+      margin: auto;
+    }
+
+    .imgR img{
+      width: 100%;
+    }
+
+    @media (max-width: 1024px){
+      .imgR img{
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 800px){
+      .imgR img{
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 768px){
+      .imgR img{
+        width: 100%;
+      }
+    }
+
+    </style>
+
     </head>
     <!--TIPS-->
     <!--You may remove all ID or Class names which contain "demo-", they are only used for demonstration. -->
@@ -194,7 +225,7 @@ session_start();
                                                 <i class="arrow"></i>
                                             </a>
                                             <ul class="collapse">
-												 <li><a href="tampil_barang.php">Barang</a></li>
+												 <li><a href="persediaan.php">Stok Barang</a></li>
                                             </ul>
 
 											<?php } ?>
@@ -260,7 +291,8 @@ session_start();
 												  <li><a href="laporan_perbarang.php">Repot Barang</a></li>
 												   <li><a href="laporan_wilayah.php">Repot Wilayah</a></li>
 												    <li><a href="laporan_customer.php">Repot Customer</a></li>
-                                                <li><a href="tampil_tagihan.php">Transaksi tagihan</a></li>
+                                                <!--<li><a href="tampil_tagihan.php">Transaksi tagihan</a></li>-->
+                                                <li><a href="tampil_transaksi.php">Transaksi Penjualan</a></li>
 												 <li><a href="persediaan.php">Report stok barang</a></li>
 
                                             </ul>

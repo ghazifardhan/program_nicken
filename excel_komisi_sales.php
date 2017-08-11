@@ -1,23 +1,8 @@
 <?php
 header("Content-type: application/vnd-ms-excel");
 header("Content-Disposition: attachment; filename=komisi_sales.xls");
-include ('koneksi.php');
-if($_GET['cari'] == 'submit'){
-  if($_GET['nama'] == 'all'){
-    $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
-      `salesman`.*,
-      `barang`.`Nama_Barang`,
-      `transaksi_detail`.`Qty`,
-      `target_salesman`.`Keterangan`,
-      `transaksi_detail`.`Harga`
-    FROM
-      `salesman`
-      INNER JOIN `transaksi_detail` ON `salesman`.`Id_Salesman` =
-        `transaksi_detail`.`Sales`
-      INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang`
-      INNER JOIN `target_salesman` ON `salesman`.`Id_Target` =
-        `target_salesman`.`Id_Target`");
-  } else {
+include ('koneksi.php');if(isset($_GET['cari'])){
+if($_GET['nama'] == ''){
   $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
     `salesman`.*,
     `barang`.`Nama_Barang`,
@@ -30,8 +15,22 @@ if($_GET['cari'] == 'submit'){
       `transaksi_detail`.`Sales`
     INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang`
     INNER JOIN `target_salesman` ON `salesman`.`Id_Target` =
-      `target_salesman`.`Id_Target` where `salesman`.`Id_Salesman` ='".$_POST['nama']."'");
-    }
+      `target_salesman`.`Id_Target`");
+} else {
+$list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+  `salesman`.*,
+  `barang`.`Nama_Barang`,
+  `transaksi_detail`.`Qty`,
+  `target_salesman`.`Keterangan`,
+  `transaksi_detail`.`Harga`
+FROM
+  `salesman`
+  INNER JOIN `transaksi_detail` ON `salesman`.`Id_Salesman` =
+    `transaksi_detail`.`Sales`
+  INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang`
+  INNER JOIN `target_salesman` ON `salesman`.`Id_Target` =
+    `target_salesman`.`Id_Target` where `salesman`.`Id_Salesman` ='".$_GET['nama']."'");
+  }
 }else{
     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
   `salesman`.*,
@@ -47,6 +46,7 @@ FROM
   INNER JOIN `target_salesman` ON `salesman`.`Id_Target` =
     `target_salesman`.`Id_Target`");
 }
+
   ?>
   <h3> Laporan Komisi Sales <h3>
   <table border="1" class="table table-bordered">

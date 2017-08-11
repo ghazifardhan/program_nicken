@@ -2,20 +2,67 @@
 include("koneksi.php");
 
 if(isset($_POST['cari'])){
-$list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
-  `transaksi`.`Jumlah` AS `Jumlah`,
-  `customer`.`Nama_Customer`,
-  `salesman`.`Nama_Salesman`,
-  `transaksi`.`No_transaksi`,
-  `transaksi`.`Tgl_Tempo`,
-  `transaksi`.`Tgl`,
-  `transaksi`.`Status`,
-  `customer`.`Id_Customer`
-FROM
-  `transaksi`
-  INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
-  INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
- where `transaksi`.`Status` = 'Lunas' and `customer`.`Id_Customer` ='".$_POST['nama']."' and Tgl between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
+  if($_POST['nama'] == "" && $_POST['Tgl1'] == "" && $_POST['Tgl2'] == ""){
+    $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+      `transaksi`.`Jumlah` AS `Jumlah`,
+      `customer`.`Nama_Customer`,
+      `salesman`.`Nama_Salesman`,
+      `transaksi`.`No_transaksi`,
+      `transaksi`.`Tgl_Tempo`,
+      `transaksi`.`Tgl`,
+      `transaksi`.`Status`,
+      `customer`.`Id_Customer`
+    FROM
+      `transaksi`
+      INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
+      INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
+     where `transaksi`.`Status` = 'Lunas'");
+   } else if($_POST['nama'] != "" && $_POST['Tgl1'] == "" && $_POST['Tgl2'] == ""){
+     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+       `transaksi`.`Jumlah` AS `Jumlah`,
+       `customer`.`Nama_Customer`,
+       `salesman`.`Nama_Salesman`,
+       `transaksi`.`No_transaksi`,
+       `transaksi`.`Tgl_Tempo`,
+       `transaksi`.`Tgl`,
+       `transaksi`.`Status`,
+       `customer`.`Id_Customer`
+     FROM
+       `transaksi`
+       INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
+       INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
+      where `transaksi`.`Status` = 'Lunas' and `customer`.`Id_Customer` ='".$_POST['nama']."'");
+   } else if($_POST['nama'] == "" && $_POST['Tgl1'] != "" && $_POST['Tgl2'] != ""){
+     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+       `transaksi`.`Jumlah` AS `Jumlah`,
+       `customer`.`Nama_Customer`,
+       `salesman`.`Nama_Salesman`,
+       `transaksi`.`No_transaksi`,
+       `transaksi`.`Tgl_Tempo`,
+       `transaksi`.`Tgl`,
+       `transaksi`.`Status`,
+       `customer`.`Id_Customer`
+     FROM
+       `transaksi`
+       INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
+       INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
+      where `transaksi`.`Status` = 'Lunas' and `transaksi`.`Tgl` between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
+   } else {
+     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+       `transaksi`.`Jumlah` AS `Jumlah`,
+       `customer`.`Nama_Customer`,
+       `salesman`.`Nama_Salesman`,
+       `transaksi`.`No_transaksi`,
+       `transaksi`.`Tgl_Tempo`,
+       `transaksi`.`Tgl`,
+       `transaksi`.`Status`,
+       `customer`.`Id_Customer`
+     FROM
+       `transaksi`
+       INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
+       INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
+      where `transaksi`.`Status` = 'Lunas' and `customer`.`Id_Customer` ='".$_POST['nama']."' and `transaksi`.`Tgl` between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
+   }
 }else{
     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
   `transaksi`.`Jumlah` AS `Jumlah`,
@@ -24,7 +71,7 @@ FROM
   `transaksi`.`No_transaksi`,
   `transaksi`.`Tgl_Tempo`,
   `transaksi`.`Tgl`,
-  `transaksi`.`Status`,  
+  `transaksi`.`Status`,
   `customer`.`Id_Customer`
 FROM
   `transaksi`
@@ -52,7 +99,7 @@ include('header.php');
 <div id="print-area" class="print-area">
 <div style="text-align:right;"><a class="btn btn-info no-print" href="javascript:printDiv('print-area');">Print</a></div>
 <br>
-<div style="text-align:right;"><a class="btn btn-success" href="excel_komisi.php">Download Exel</a></div>
+<div style="text-align:right;"><a class="btn btn-success" href="excel_komisi.php?cari=<?php echo $_POST['cari'];?>&nama=<?php echo $_POST['nama']; ?>&Tgl1=<?php echo $_POST['Tgl1']; ?>&Tgl2=<?php echo $_POST['Tgl2']; ?>">Download Exel</a></div>
 <h2><center>Laporan Komisi Bayar Sales</center></h2>
 <table border="1" class="table table-bordered">
 
@@ -109,10 +156,25 @@ function printDiv(elementId) {
     window.frames["print_frame"].document.body.innerHTML = '<style>' + a + '</style>' + b;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
+    $(".datepicker").datepicker({
+                autoclose: true,
+                format: 'dd/mm/yyyy',
+                changeMonth: true,
+                changeYear: true
+            });
 
 }
 </script>
 
+
+<style>
+
+.print-area {border:1px solid red;padding:1em;margin:0 0 1em}
+</style>
+
+<?php
+include('footer.php');
+?>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -124,10 +186,3 @@ $(document).ready(function(){
             });
     });
 </script>
-
-<style>
-
-.print-area {border:1px solid red;padding:1em;margin:0 0 1em}
-</style>
-<?php
-include('footer.php');

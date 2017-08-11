@@ -2,20 +2,57 @@
 header("Content-type: application/vnd-ms-excel");
 header("Content-Disposition: attachment; filename=per_perbarang.xls");
 include ('koneksi.php');
-if(isset($_POST['cari'])){
-$list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
-  `wilayah`.`Nama`,
-  `transaksi_detail`.*,
-  `salesman`.`Nama_Salesman`,
-  `barang`.`Nama_Barang`
-FROM
-  `wilayah`
-  INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
-    `wilayah`.`Id_Wilayah`
-  INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
-  INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.Id_Barang ='".$_POST['nama']."' and Tgl between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
-  //echo $list_transaksi;
+if(isset($_GET['cari'])){
+  if($_GET['nama'] == "" && $_GET['Tgl1'] == "" && $_GET['Tgl2'] == ""){
+        $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+      `wilayah`.`Nama`,
+      `transaksi_detail`.*,
+      `salesman`.`Nama_Salesman`,
+      `barang`.`Nama_Barang`
+    FROM
+      `wilayah`
+      INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+        `wilayah`.`Id_Wilayah`
+      INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+      INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang`");
+  } else if($_GET['nama'] != "" && $_GET['Tgl1'] == "" && $_GET['Tgl2'] == "") {
+    $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+      `wilayah`.`Nama`,
+      `transaksi_detail`.*,
+      `salesman`.`Nama_Salesman`,
+      `barang`.`Nama_Barang`
+    FROM
+      `wilayah`
+      INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+        `wilayah`.`Id_Wilayah`
+      INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+      INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.Id_Barang ='".$_GET['nama']."'");
+  } else if($_GET['nama'] == "" && $_GET['Tgl1'] != "" && $_GET['Tgl2'] != ""){
+    $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+      `wilayah`.`Nama`,
+      `transaksi_detail`.*,
+      `salesman`.`Nama_Salesman`,
+      `barang`.`Nama_Barang`
+    FROM
+      `wilayah`
+      INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+        `wilayah`.`Id_Wilayah`
+      INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+      INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.`Tgl` between '".$_GET['Tgl1']."' and '".$_GET['Tgl2']."'");
+  } else {
 
+      $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+        `wilayah`.`Nama`,
+        `transaksi_detail`.*,
+        `salesman`.`Nama_Salesman`,
+        `barang`.`Nama_Barang`
+      FROM
+        `wilayah`
+        INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+          `wilayah`.`Id_Wilayah`
+        INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+        INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.Id_Barang ='".$_GET['nama']."' and `transaksi_detail`.`Tgl` between '".$_GET['Tgl1']."' and '".$_GET['Tgl2']."'");
+  }
 }else{
     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
   `wilayah`.`Nama`,

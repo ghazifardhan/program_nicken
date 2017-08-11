@@ -1,19 +1,55 @@
 <?php
 include("koneksi.php");
 if(isset($_POST['cari'])){
-$list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
-  `wilayah`.`Nama`,
-  `transaksi_detail`.*,
-  `salesman`.`Nama_Salesman`,
-  `barang`.`Nama_Barang`
-FROM
-  `wilayah`
-  INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
-    `wilayah`.`Id_Wilayah`
-  INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
-  INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.Id_Barang ='".$_POST['nama']."' and Tgl between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
-  //echo $list_transaksi;
-
+  if($_POST['nama'] == "" && $_POST['Tgl1'] == "" && $_POST['Tgl2'] == ""){
+        $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+      `wilayah`.`Nama`,
+      `transaksi_detail`.*,
+      `salesman`.`Nama_Salesman`,
+      `barang`.`Nama_Barang`
+    FROM
+      `wilayah`
+      INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+        `wilayah`.`Id_Wilayah`
+      INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+      INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang`");
+  } else if($_POST['nama'] != "" && $_POST['Tgl1'] == "" && $_POST['Tgl2'] == "") {
+    $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+      `wilayah`.`Nama`,
+      `transaksi_detail`.*,
+      `salesman`.`Nama_Salesman`,
+      `barang`.`Nama_Barang`
+    FROM
+      `wilayah`
+      INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+        `wilayah`.`Id_Wilayah`
+      INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+      INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.Id_Barang ='".$_POST['nama']."'");
+  } else if($_POST['nama'] == "" && $_POST['Tgl1'] != "" && $_POST['Tgl2'] != ""){
+    $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+      `wilayah`.`Nama`,
+      `transaksi_detail`.*,
+      `salesman`.`Nama_Salesman`,
+      `barang`.`Nama_Barang`
+    FROM
+      `wilayah`
+      INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+        `wilayah`.`Id_Wilayah`
+      INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+      INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.`Tgl` between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
+  } else {
+      $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
+        `wilayah`.`Nama`,
+        `transaksi_detail`.*,
+        `salesman`.`Nama_Salesman`,
+        `barang`.`Nama_Barang`
+      FROM
+        `wilayah`
+        INNER JOIN `transaksi_detail` ON `transaksi_detail`.`Wilayah` =
+          `wilayah`.`Id_Wilayah`
+        INNER JOIN `salesman` ON `transaksi_detail`.`Sales` = `salesman`.`Id_Salesman`
+        INNER JOIN `barang` ON `transaksi_detail`.`Id_Barang` = `barang`.`Id_Barang` where `transaksi_detail`.`Id_Barang` ='".$_POST['nama']."' and `transaksi_detail`.`Tgl` between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
+  }
 }else{
     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
   `wilayah`.`Nama`,
@@ -48,7 +84,7 @@ include('header.php');
 <div id="print-area" class="print-area">
 <div style="text-align:right;"><a class="btn btn-info no-print" href="javascript:printDiv('print-area');">Print</a></div>
 <br>
-<div style="text-align:right;"><a class="btn btn-success no-print" href="excel_perbarang.php">Download Exel</a></div>
+<div style="text-align:right;"><a class="btn btn-success no-print" href="excel_perbarang.php?cari=<?php echo $_POST['cari'];?>&nama=<?php echo $_POST['nama']; ?>&Tgl1=<?php echo $_POST['Tgl1']; ?>&Tgl2=<?php echo $_POST['Tgl2']; ?>">Download Exel</a></div>
 <h4>Laporan Barang PT.Pratama inti distribusindo</h4>
 <table border="1" class="table table-bordered">
 
