@@ -3,7 +3,7 @@ include("koneksi.php");
 
 if(isset($_POST['cari'])){
 $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
-  Sum(`transaksi`.`Jumlah`) AS `Jumlah`,
+  `transaksi`.`Jumlah` AS `Jumlah`,
   `customer`.`Nama_Customer`,
   `salesman`.`Nama_Salesman`,
   `transaksi`.`No_transaksi`,
@@ -15,29 +15,22 @@ FROM
   `transaksi`
   INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
   INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
- where `customer`.`Id_Customer` ='".$_POST['nama']."' and Tgl between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'
-GROUP BY
-  `transaksi`.`No_transaksi`,
-  `transaksi`.`Tgl_Tempo`,
-  `transaksi`.`Tgl`");
+ where `transaksi`.`Status` = 'Lunas' and `customer`.`Id_Customer` ='".$_POST['nama']."' and Tgl between '".$_POST['Tgl1']."' and '".$_POST['Tgl2']."'");
 }else{
     $list_transaksi=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT
-  Sum(`transaksi`.`Jumlah`) AS `Jumlah`,
+  `transaksi`.`Jumlah` AS `Jumlah`,
   `customer`.`Nama_Customer`,
   `salesman`.`Nama_Salesman`,
   `transaksi`.`No_transaksi`,
   `transaksi`.`Tgl_Tempo`,
   `transaksi`.`Tgl`,
+  `transaksi`.`Status`,  
   `customer`.`Id_Customer`
 FROM
   `transaksi`
   INNER JOIN `customer` ON `transaksi`.`Id_Customer` = `customer`.`Id_Customer`
   INNER JOIN `salesman` ON `transaksi`.`Id_Salesman` = `salesman`.`Id_Salesman`
-GROUP BY
-  `transaksi`.`No_transaksi`,
-  `transaksi`.`Tgl_Tempo`,
-  `transaksi`.`Tgl`,
-  `customer`.`Id_Customer`");
+  where `transaksi`.`Status` = 'Lunas'");
 }
 include('header.php');
 ?>

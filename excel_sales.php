@@ -54,9 +54,9 @@ FROM
 
     <td><?php echo $proses['Nama_Barang'];?></td>
 
-        <td><?php echo $proses['Harga'];?></td>
-        <td><?php echo  $proses['Qty'];?></td>
-    <td><?php echo $proses['Harga'] * $proses['Qty'];?></td>
+        <td><?php echo number_format($proses['Harga'],0,',','.');?></td>
+        <td><?php echo  number_format($proses['Qty'],0,',','.');?></td>
+    <td><?php echo number_format($proses['Harga'] * $proses['Qty'],0,',','.');?></td>
 
 </tr>
 
@@ -66,7 +66,7 @@ FROM
     } ?>
     <tr>
     <td colspan="4">Jumlah Barang Belanja</td>
-    <td><?php echo $total;?></td>
+    <td><?php echo number_format($total,0,',','.');?></td>
     </tr>
 
 

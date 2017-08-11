@@ -12,6 +12,9 @@ Value ('".$_POST["No_Tagihan"]."',
 $proses=mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 if ($proses){
+    if($_POST['Jumlah'] == $_POST['sisa_tagihan']){
+      $update_status = mysqli_query($GLOBALS["___mysqli_ston"], "update transaksi set Status = 'Lunas' where Id_Transaksi='".$_POST['Id_Transaksi']."'");
+    }
     $status=0;
     $update_kontrak = mysqli_query($GLOBALS["___mysqli_ston"], "update transaksi set Sudah_Dibayar=Sudah_Dibayar+'".$_POST['Jumlah']."' where Id_Transaksi='".$_POST['Id_Transaksi']."'");
     $cek_pembayaran = mysqli_query($GLOBALS["___mysqli_ston"], "select count(Id_Tagihan) as cicilan from tagihan where Id_Customer ='".$_POST["Id_Customer"]."' and Id_Transaksi ='".$_POST['Id_Transaksi']."'");
@@ -78,11 +81,11 @@ while($data=mysqli_fetch_array($pk)){
 </tr>
 <tr>
 <td>Jumlah Tagihan</td>
-<td> <input type="text"class="form-control" id="tagihan" readonly></td>
+<td><input type="text"class="form-control" id="tagihan" readonly></td>
 </tr>
 <tr>
 <td>Sisa_Tagihan</td>
-<td> <input type="text"class="form-control" id="top" readonly></td>
+<td><input type="text"class="form-control" id="top" name="sisa_tagihan" readonly></td>
 </tr>
 <tr>
 <td><input type="submit"value="simpan"class="btn btn-danger" name="simpan"/></td>
