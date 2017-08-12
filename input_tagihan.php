@@ -50,7 +50,7 @@ include('header.php');
 <td>Transaksi</td>
 <td> <select class="form-control" class="form-control" name="Id_Transaksi" id="no_transaksi">
 <option value="">Pilih Transaksi</option>
-<?php $pk=mysqli_query($GLOBALS["___mysqli_ston"], "select * from transaksi WHERE Status ='BELUM LUNAS'");
+<?php $pk=mysqli_query($GLOBALS["___mysqli_ston"], "select * from transaksi WHERE Status = 'BELUM LUNAS'");
 
 while($data=mysqli_fetch_array($pk)){
     ?>

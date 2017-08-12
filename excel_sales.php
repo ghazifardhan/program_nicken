@@ -108,7 +108,7 @@ FROM
     $total+=$proses['Harga'] * $proses['Qty'];
     } ?>
     <tr>
-    <td colspan="4">Jumlah Barang Belanja</td>
+    <td colspan="5">Jumlah Barang Belanja</td>
     <td><?php echo number_format($total,0,',','.');?></td>
     </tr>
 
