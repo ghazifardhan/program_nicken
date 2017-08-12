@@ -1,7 +1,7 @@
 <?php
 $server = "localhost";
 $user = "root";
-$password = "";
+$password = "root";
 $database = "nicken_litan_m";
 
 ($GLOBALS["___mysqli_ston"] = mysqli_connect($server, $user, $password));
