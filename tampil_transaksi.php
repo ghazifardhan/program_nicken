@@ -37,13 +37,14 @@ FROM
     <td><?php echo $proses['Nama_Salesman'];?></td>
     <td><?php echo $proses['Nama_Customer'];?></td>
     <td><?php echo number_format($proses['Jumlah']);?></td>
-    <td><a class="btn btn-info" href="detail_transaksi.php?Id_Transaksi=<?php echo $proses['Id_Transaksi'];?>"/>
-    Detail</a></td>
+    <td>
+    <a class="btn btn-info" href="detail_transaksi.php?Id_Transaksi=<?php echo $proses['Id_Transaksi'];?>"/>
+    Detail</a>
+    
+    <a class="btn btn-danger" href="delete_transaksi.php?Id_Transaksi=<?php echo $proses['Id_Transaksi'];?>"/>
+    Delete</a></td>
     <!--<td><a class="btn btn-warning" href="edit_transaksi.php?Id_Transaksi=<?php echo $proses['Id_Transaksi'];?>"/>
-    Edit</a></td>
-
-    <td><a class="btn btn-danger" href="delete_transaksi.php?Id_Transaksi=<?php echo $proses['Id_Transaksi'];?>"/>
-    Delete</a></td>-->
+    Edit</a></td>-->
 </tr>
     <?php } ?>
 </table>
