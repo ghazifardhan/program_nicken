@@ -100,7 +100,15 @@ include('header.php');
 <div style="text-align:right;"><a class="btn btn-info no-print" href="javascript:printDiv('print-area');">Print</a></div>
 <br>
 <div style="text-align:right;"><a class="btn btn-success" href="excel_komisi.php?cari=<?php echo $_POST['cari'];?>&nama=<?php echo $_POST['nama']; ?>&Tgl1=<?php echo $_POST['Tgl1']; ?>&Tgl2=<?php echo $_POST['Tgl2']; ?>">Download Exel</a></div>
-<h2><center>Laporan Komisi Bayar Sales</center></h2>
+
+<table>
+        <tr>
+        <td><img src="logo_nicken.png" width="50px" height="50px"></td>
+        <td align="center"><h4>PT.Pratama Inti Distribusindo</h4></td>
+        </tr>
+    </table>
+<h4 align="center">Laporan Komisi Bayar Sales</h4>
+<h5 align="center"><?php echo date("D, d M Y"); ?></h5>
 <table border="1" class="table table-bordered">
 
 
@@ -142,6 +150,16 @@ include('header.php');
     </tr>
 
 
+</table>
+  <table>
+    <tr>
+      <th style="height:100px">Disetujui Oleh</th>
+      <th style="height:100px;padding-left:100px">Dibuat Oleh</th>
+    </tr>
+    <tr>
+      <td>Indradi Agusaputra</td>
+      <td style="padding-left:100px">Admin</td>
+    </tr>
 </table>
 </div>
 </form>

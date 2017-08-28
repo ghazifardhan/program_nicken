@@ -1,7 +1,5 @@
 <?php
-ob_start();
-include ('koneksi.php');
-
+include('koneksi.php');
 include('header.php');
 ?>
 <?php if($_SESSION['level'] != 'spv'){ ?>
